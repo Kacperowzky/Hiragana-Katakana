@@ -1,1 +1,186 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Hiragana & Katakana — 日本語</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-pattern"></div>
 
+  <div class="petal" style="left:10%; animation-duration:12s; animation-delay:0s;"></div>
+  <div class="petal" style="left:25%; animation-duration:15s; animation-delay:2s; width:8px; height:8px;"></div>
+  <div class="petal" style="left:45%; animation-duration:11s; animation-delay:4s;"></div>
+  <div class="petal" style="left:60%; animation-duration:14s; animation-delay:1s; width:12px; height:12px;"></div>
+  <div class="petal" style="left:75%; animation-duration:13s; animation-delay:3s;"></div>
+  <div class="petal" style="left:85%; animation-duration:16s; animation-delay:5s; width:7px; height:7px;"></div>
+  <div class="petal" style="left:15%; animation-duration:18s; animation-delay:7s;"></div>
+  <div class="petal" style="left:55%; animation-duration:10s; animation-delay:6s; width:9px; height:9px;"></div>
+
+  <div class="container">
+
+    <!-- EKRAN STARTOWY -->
+    <div id="startScreen">
+      <div class="start-title">Hiragana & Katakana</div>
+      <div class="start-jp">ひらがな ・ カタカナ</div>
+      <p class="start-desc">Wybierz, czego chcesz się uczyć</p>
+
+      <div class="choice-cards">
+        <div class="choice-card" data-script="hiragana">
+          <span class="big">あ</span>
+          <h2>Hiragana</h2>
+          <p>ひらがな</p>
+        </div>
+        <div class="choice-card" data-script="katakana">
+          <span class="big">ア</span>
+          <h2>Katakana</h2>
+          <p>カタカナ</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- GŁÓWNY INTERFEJS -->
+    <div id="mainApp">
+      <div class="top-bar">
+        <button class="back-btn" id="backBtn">← Wróć do wyboru</button>
+        <div class="current-script-label" id="scriptLabel">Hiragana</div>
+        <label class="font-toggle">
+          <input type="checkbox" id="fontToggle">
+          Japoński font
+        </label>
+      </div>
+
+      <div class="mode-tabs">
+        <button class="mode-tab active" data-mode="chart">Tabela</button>
+        <button class="mode-tab" data-mode="flashcards">Fiszki</button>
+        <button class="mode-tab" data-mode="quiz">Quiz</button>
+        <button class="mode-tab" data-mode="write">Pisanie</button>
+      </div>
+
+      <div class="category-tabs">
+        <button class="cat-tab active" data-cat="basic">Podstawowe</button>
+        <button class="cat-tab" data-cat="extra">Dakuten / Handakuten</button>
+        <button class="cat-tab" data-cat="yoon">Połączenia</button>
+        <button class="cat-tab" data-cat="hard">★ Trudne</button>
+      </div>
+
+      <div class="row-filters" id="rowFilters"></div>
+
+      <div id="chartView">
+        <div class="chart-container">
+          <div class="chart-grid" id="chartGrid"></div>
+        </div>
+      </div>
+
+      <div id="flashView" class="hidden">
+        <div class="flashcard-area">
+          <div class="settings-row">
+            <label class="toggle-label">
+              <input type="checkbox" id="showRomajiFirst">
+              Najpierw romaji
+            </label>
+            <label class="toggle-label">
+              <input type="checkbox" id="autoSpeak">
+              Auto-odtwarzaj dźwięk
+            </label>
+          </div>
+
+          <div class="flashcard" id="flashcard">
+            <div class="flashcard-inner">
+              <div class="flashcard-front">
+                <span class="big-char" id="flashChar">あ</span>
+                <span class="flashcard-hint">Kliknij, aby odwrócić</span>
+              </div>
+              <div class="flashcard-back">
+                <span class="big-romaji" id="flashRomaji">a</span>
+                <span class="flashcard-hint">Kliknij, aby odwrócić</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flash-controls">
+            <button class="btn" id="flashPrev">← Poprzednia</button>
+            <button class="btn sound" id="flashSpeak">🔊</button>
+            <button class="btn primary" id="flashNext">Następna →</button>
+            <button class="btn" id="flashShuffle">Losuj</button>
+          </div>
+
+          <div class="quiz-stats">
+            <span>Karta: <strong id="flashIndex">1</strong> / <strong id="flashTotal">0</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="quizView" class="hidden">
+        <div class="quiz-area">
+          <div class="settings-row">
+            <label class="toggle-label">
+              <input type="radio" name="quizType" value="choice" checked>
+              Wybór
+            </label>
+            <label class="toggle-label">
+              <input type="radio" name="quizType" value="type">
+              Wpisz romaji
+            </label>
+          </div>
+
+          <div class="quiz-char" id="quizChar">あ</div>
+          <button class="btn sound" id="quizSpeak" style="margin-bottom: 8px;">🔊 Posłuchaj</button>
+
+          <div id="quizChoice" class="quiz-options"></div>
+
+          <div id="quizType" class="quiz-input-area hidden">
+            <input type="text" class="quiz-input" id="quizInput" placeholder="wpisz romaji..." autocomplete="off" autocapitalize="off" spellcheck="false">
+            <br><br>
+            <button class="btn primary" id="quizCheck">Sprawdź</button>
+          </div>
+
+          <div class="feedback" id="quizFeedback"></div>
+
+          <div class="quiz-stats">
+            <span>Poprawne: <strong id="quizCorrect">0</strong></span>
+            <span>Błędne: <strong id="quizWrong">0</strong></span>
+            <span>Razem: <strong id="quizTotal">0</strong></span>
+          </div>
+
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="quizProgress"></div>
+          </div>
+
+          <div class="quiz-controls" style="margin-top: 18px;">
+            <button class="btn" id="quizNext">Następne →</button>
+            <button class="btn" id="quizReset">Resetuj</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="writeView" class="hidden">
+        <div class="write-area">
+          <div class="write-target" id="writeChar">あ</div>
+          <div class="write-romaji" id="writeRomaji">a</div>
+          <button class="btn sound" id="writeSpeak">🔊 Posłuchaj</button>
+
+          <canvas id="writeCanvas" width="300" height="300"></canvas>
+
+          <p class="write-hint">Narysuj znak powyżej • mysz lub palec</p>
+
+          <div class="write-controls">
+            <button class="btn" id="writeClear">Wyczyść</button>
+            <button class="btn primary" id="writeNext">Następny znak →</button>
+            <button class="btn" id="writeShuffle">Losuj</button>
+          </div>
+
+          <div class="quiz-stats">
+            <span>Znak: <strong id="writeIndex">1</strong> / <strong id="writeTotal">0</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
