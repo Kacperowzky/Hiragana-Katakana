@@ -1,0 +1,87 @@
+:root {
+      --bg: #0c0b10;
+      --surface: rgba(28, 26, 38, 0.85);
+      --surface2: rgba(38, 35, 52, 0.9);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(232, 160, 180, 0.25);
+      --text: #f5f0eb;
+      --text-muted: #a89f96;
+      --accent: #e8a0b4;
+      --accent-soft: #f0c4d0;
+      --accent-deep: #c97b8e;
+      --gold: #d4af77;
+      --gold-soft: #e8d5b5;
+      --success: #7dcea0;
+      --error: #e07a7a;
+      --radius: 16px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --transition: 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      --jp-font: 'Shippori Mincho', serif;
+      --normal-font: 'Noto Sans JP', system-ui, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--normal-font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body.use-jp-font .char,
+    body.use-jp-font .big-char,
+    body.use-jp-font .write-target,
+    body.use-jp-font .quiz-char,
+    body.use-jp-font .start-title,
+    body.use-jp-font .choice-card .big {
+      font-family: var(--jp-font);
+    }
+
+    .bg-pattern {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(232, 160, 180, 0.07) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(212, 175, 119, 0.05) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 30% at 50% 50%, rgba(120, 90, 160, 0.04) 0%, transparent 60%),
+        var(--bg);
+    }
+
+    .bg-pattern::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e8a0b4' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.6;
+    }
+
+    .petal {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(ellipse at 30% 30%, #f0c4d0, #e8a0b4);
+      border-radius: 10px 0 10px 0;
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: -1;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 0; }
+      10% { opacity: 0.4; }
+      90% { opacity: 0.3; }
+      100% { transform: translateY(110vh) rotate(720deg) translateX(40px); opacity: 0; }
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+      position: relative;
+    }
