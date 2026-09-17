@@ -322,19 +322,26 @@ const HIRAGANA = [
       document.getElementById('quizFeedback').className = 'feedback';
 
       currentQuizItem = data[Math.floor(Math.random() * data.length)];
+      const type = document.querySelector('input[name="quizType"]:checked').value;
       const charEl = document.getElementById('quizChar');
       charEl.style.animation = 'none';
       charEl.offsetHeight;
       charEl.style.animation = '';
-      charEl.textContent = currentQuizItem.char;
 
-      const type = document.querySelector('input[name="quizType"]:checked').value;
-
-      if (type === 'choice') {
+      if (type === 'listen') {
+        // Listening mode: hide character, play sound, show character options
+        charEl.textContent = '🔊';
         document.getElementById('quizChoice').classList.remove('hidden');
         document.getElementById('quizType').classList.add('hidden');
-        renderQuizOptions(data);
+        renderQuizOptions(data, true); // true = show characters instead of romaji
+        setTimeout(() => speak(currentQuizItem.char), 300);
+      } else if (type === 'choice') {
+        charEl.textContent = currentQuizItem.char;
+        document.getElementById('quizChoice').classList.remove('hidden');
+        document.getElementById('quizType').classList.add('hidden');
+        renderQuizOptions(data, false);
       } else {
+        charEl.textContent = currentQuizItem.char;
         document.getElementById('quizChoice').classList.add('hidden');
         document.getElementById('quizType').classList.remove('hidden');
         document.getElementById('quizInput').value = '';
@@ -343,27 +350,34 @@ const HIRAGANA = [
       updateQuizStats();
     }
 
-    function renderQuizOptions(data) {
+    function renderQuizOptions(data, showChars = false) {
       const container = document.getElementById('quizChoice');
       container.innerHTML = '';
-      let options = [currentQuizItem.romaji];
-      const others = data.filter(d => d.romaji !== currentQuizItem.romaji);
-      shuffle(others).slice(0, 3).forEach(o => options.push(o.romaji));
+
+      let correctValue = showChars ? currentQuizItem.char : currentQuizItem.romaji;
+      let options = [correctValue];
+
+      const others = data.filter(d => showChars ? d.char !== currentQuizItem.char : d.romaji !== currentQuizItem.romaji);
+      shuffle(others).slice(0, 3).forEach(o => {
+        options.push(showChars ? o.char : o.romaji);
+      });
       options = shuffle(options);
 
       options.forEach(opt => {
         const btn = document.createElement('button');
         btn.className = 'quiz-option';
         btn.textContent = opt;
-        btn.onclick = () => checkChoice(opt, btn);
+        btn.onclick = () => checkChoice(opt, btn, showChars);
         container.appendChild(btn);
       });
     }
 
-    function checkChoice(selected, btn) {
+    function checkChoice(selected, btn, showChars = false) {
       if (quizAnswered) return;
       quizAnswered = true;
-      const correct = selected === currentQuizItem.romaji;
+
+      const correctValue = showChars ? currentQuizItem.char : currentQuizItem.romaji;
+      const correct = selected === correctValue;
       markHard(currentQuizItem.romaji, !correct);
 
       if (correct) {
@@ -375,9 +389,9 @@ const HIRAGANA = [
         quizWrong++;
         btn.classList.add('wrong');
         document.querySelectorAll('.quiz-option').forEach(b => {
-          if (b.textContent === currentQuizItem.romaji) b.classList.add('correct');
+          if (b.textContent === correctValue) b.classList.add('correct');
         });
-        document.getElementById('quizFeedback').textContent = '✗ Poprawna: ' + currentQuizItem.romaji;
+        document.getElementById('quizFeedback').textContent = '✗ Poprawna: ' + correctValue + (showChars ? '' : ' (' + currentQuizItem.char + ')');
         document.getElementById('quizFeedback').className = 'feedback bad';
       }
       updateQuizStats();
@@ -420,10 +434,18 @@ const HIRAGANA = [
     }
 
     let canvas, ctx, drawing = false, lastX = 0, lastY = 0;
+    let writeChallengeMode = false;
+    let writeRevealed = false;
+
+    function getWriteMode() {
+      const el = document.querySelector('input[name="writeMode"]:checked');
+      return el ? el.value : 'normal';
+    }
 
     function initWrite() {
       writeDeck = shuffle(getFilteredData());
       writeIndex = 0;
+      writeRevealed = false;
       if (writeDeck.length === 0) {
         document.getElementById('writeChar').textContent = '–';
         document.getElementById('writeRomaji').textContent = 'Brak znaków';
@@ -432,16 +454,73 @@ const HIRAGANA = [
       }
       showWriteChar();
       setupCanvas();
+      updateWriteUI();
+    }
+
+    function updateWriteUI() {
+      writeChallengeMode = getWriteMode() === 'challenge';
+      const normalControls = document.getElementById('writeControlsNormal');
+      const challengeControls = document.getElementById('writeControlsChallenge');
+      const revealBox = document.getElementById('writeReveal');
+      const hint = document.getElementById('writeHint');
+
+      if (writeChallengeMode) {
+        normalControls.classList.add('hidden');
+        challengeControls.classList.remove('hidden');
+        revealBox.classList.add('hidden');
+        hint.textContent = 'Narysuj znak z pamięci, potem kliknij Sprawdź';
+      } else {
+        normalControls.classList.remove('hidden');
+        challengeControls.classList.add('hidden');
+        revealBox.classList.add('hidden');
+        hint.textContent = 'Narysuj znak powyżej • mysz lub palec';
+      }
     }
 
     function showWriteChar() {
       if (writeDeck.length === 0) return;
       const item = writeDeck[writeIndex];
-      document.getElementById('writeChar').textContent = item.char;
-      document.getElementById('writeRomaji').textContent = item.romaji;
+      writeRevealed = false;
+
+      const isChallenge = getWriteMode() === 'challenge';
+
+      if (isChallenge) {
+        // Only show romaji
+        document.getElementById('writeChar').textContent = '?';
+        document.getElementById('writeRomaji').textContent = item.romaji;
+        document.getElementById('writeReveal').classList.add('hidden');
+        document.getElementById('writeControlsChallenge').classList.remove('hidden');
+      } else {
+        document.getElementById('writeChar').textContent = item.char;
+        document.getElementById('writeRomaji').textContent = item.romaji;
+      }
+
       document.getElementById('writeIndex').textContent = writeIndex + 1;
       document.getElementById('writeTotal').textContent = writeDeck.length;
       clearCanvas();
+      updateWriteUI();
+    }
+
+    function writeCheck() {
+      if (writeDeck.length === 0 || writeRevealed) return;
+      writeRevealed = true;
+      const item = writeDeck[writeIndex];
+
+      document.getElementById('writeChar').textContent = item.char;
+      document.getElementById('writeRevealChar').textContent = item.char;
+      document.getElementById('writeReveal').classList.remove('hidden');
+      document.getElementById('writeControlsChallenge').classList.add('hidden');
+      speak(item.char);
+    }
+
+    function writeSelfRate(knew) {
+      if (writeDeck.length === 0) return;
+      const item = writeDeck[writeIndex];
+      markHard(item.romaji, !knew);
+
+      // Next character
+      writeIndex = (writeIndex + 1) % writeDeck.length;
+      showWriteChar();
     }
 
     function setupCanvas() {
@@ -589,6 +668,7 @@ const HIRAGANA = [
     });
 
     document.getElementById('writeClear').onclick = () => clearCanvas();
+    document.getElementById('writeClear2').onclick = () => clearCanvas();
     document.getElementById('writeNext').onclick = () => {
       if (writeDeck.length === 0) return;
       writeIndex = (writeIndex + 1) % writeDeck.length;
@@ -598,3 +678,13 @@ const HIRAGANA = [
     document.getElementById('writeSpeak').onclick = () => {
       if (writeDeck[writeIndex]) speak(writeDeck[writeIndex].char);
     };
+    document.getElementById('writeCheck').onclick = () => writeCheck();
+    document.getElementById('writeKnew').onclick = () => writeSelfRate(true);
+    document.getElementById('writeMissed').onclick = () => writeSelfRate(false);
+
+    document.querySelectorAll('input[name="writeMode"]').forEach(r => {
+      r.onchange = () => {
+        writeRevealed = false;
+        showWriteChar();
+      };
+    });
