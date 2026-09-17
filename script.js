@@ -725,3 +725,62 @@ const HIRAGANA = [
         showWriteChar();
       };
     });
+    // ========== BACKGROUND MUSIC ==========
+    const bgMusic = document.getElementById('bgMusic');
+    const musicBtns = [
+      document.getElementById('musicBtn'),
+      document.getElementById('musicBtnStart')
+    ].filter(Boolean);
+
+    if (bgMusic) {
+      bgMusic.volume = 0.18; // cicho, klimatycznie
+      let musicMuted = localStorage.getItem('hk_music_muted') === '1';
+
+      function updateMusicUI() {
+        musicBtns.forEach(btn => {
+          btn.textContent = musicMuted ? '🔇' : '🔊';
+          btn.classList.toggle('muted', musicMuted);
+        });
+      }
+
+      function tryPlayMusic() {
+        if (musicMuted) return;
+        bgMusic.play().catch(() => {
+          // autoplay blocked until user interaction
+        });
+      }
+
+      function toggleMusic() {
+        musicMuted = !musicMuted;
+        localStorage.setItem('hk_music_muted', musicMuted ? '1' : '0');
+        if (musicMuted) {
+          bgMusic.pause();
+        } else {
+          bgMusic.play().catch(() => {});
+        }
+        updateMusicUI();
+      }
+
+      musicBtns.forEach(btn => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          toggleMusic();
+        };
+      });
+
+      updateMusicUI();
+
+      // Start after first user click (browser autoplay policy)
+      const startOnInteract = () => {
+        tryPlayMusic();
+        document.removeEventListener('click', startOnInteract);
+        document.removeEventListener('touchstart', startOnInteract);
+      };
+      document.addEventListener('click', startOnInteract);
+      document.addEventListener('touchstart', startOnInteract);
+
+      // If already unmuted and allowed, try play
+      if (!musicMuted) {
+        tryPlayMusic();
+      }
+    }
