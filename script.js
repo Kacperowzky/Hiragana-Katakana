@@ -25,10 +25,10 @@ const HIRAGANA = [
       {char:'ひゃ', romaji:'hya', row:'hya', cat:'yoon'}, {char:'ひゅ', romaji:'hyu', row:'hya', cat:'yoon'}, {char:'ひょ', romaji:'hyo', row:'hya', cat:'yoon'},
       {char:'みゃ', romaji:'mya', row:'mya', cat:'yoon'}, {char:'みゅ', romaji:'myu', row:'mya', cat:'yoon'}, {char:'みょ', romaji:'myo', row:'mya', cat:'yoon'},
       {char:'りゃ', romaji:'rya', row:'rya', cat:'yoon'}, {char:'りゅ', romaji:'ryu', row:'rya', cat:'yoon'}, {char:'りょ', romaji:'ryo', row:'rya', cat:'yoon'},
-      {char:'ぎゃ', romaji:'gya', row:'gya', cat:'yoon'}, {char:'ぎゅ', romaji:'gyu', row:'gya', cat:'yoon'}, {char:'ぎょ', romaji:'gyo', row:'gya', cat:'yoon'},
-      {char:'じゃ', romaji:'ja', row:'ja', cat:'yoon'}, {char:'じゅ', romaji:'ju', row:'ja', cat:'yoon'}, {char:'じょ', romaji:'jo', row:'ja', cat:'yoon'},
-      {char:'びゃ', romaji:'bya', row:'bya', cat:'yoon'}, {char:'びゅ', romaji:'byu', row:'bya', cat:'yoon'}, {char:'びょ', romaji:'byo', row:'bya', cat:'yoon'},
-      {char:'ぴゃ', romaji:'pya', row:'pya', cat:'yoon'}, {char:'ぴゅ', romaji:'pyu', row:'pya', cat:'yoon'}, {char:'ぴょ', romaji:'pyo', row:'pya', cat:'yoon'},
+      {char:'ぎゃ', romaji:'gya', row:'gya', cat:'yoon_d'}, {char:'ぎゅ', romaji:'gyu', row:'gya', cat:'yoon_d'}, {char:'ぎょ', romaji:'gyo', row:'gya', cat:'yoon_d'},
+      {char:'じゃ', romaji:'ja', row:'ja', cat:'yoon_d'}, {char:'じゅ', romaji:'ju', row:'ja', cat:'yoon_d'}, {char:'じょ', romaji:'jo', row:'ja', cat:'yoon_d'},
+      {char:'びゃ', romaji:'bya', row:'bya', cat:'yoon_d'}, {char:'びゅ', romaji:'byu', row:'bya', cat:'yoon_d'}, {char:'びょ', romaji:'byo', row:'bya', cat:'yoon_d'},
+      {char:'ぴゃ', romaji:'pya', row:'pya', cat:'yoon_d'}, {char:'ぴゅ', romaji:'pyu', row:'pya', cat:'yoon_d'}, {char:'ぴょ', romaji:'pyo', row:'pya', cat:'yoon_d'},
       {char:'っ', romaji:'(小) tsu', row:'small', cat:'yoon'},
       {char:'ー', romaji:'ー', row:'chouon', cat:'yoon'},
 ];
@@ -60,18 +60,15 @@ const HIRAGANA = [
       {char:'ヒャ', romaji:'hya', row:'hya', cat:'yoon'}, {char:'ヒュ', romaji:'hyu', row:'hya', cat:'yoon'}, {char:'ヒョ', romaji:'hyo', row:'hya', cat:'yoon'},
       {char:'ミャ', romaji:'mya', row:'mya', cat:'yoon'}, {char:'ミュ', romaji:'myu', row:'mya', cat:'yoon'}, {char:'ミョ', romaji:'myo', row:'mya', cat:'yoon'},
       {char:'リャ', romaji:'rya', row:'rya', cat:'yoon'}, {char:'リュ', romaji:'ryu', row:'rya', cat:'yoon'}, {char:'リョ', romaji:'ryo', row:'rya', cat:'yoon'},
-      {char:'ギャ', romaji:'gya', row:'gya', cat:'yoon'}, {char:'ギュ', romaji:'gyu', row:'gya', cat:'yoon'}, {char:'ギョ', romaji:'gyo', row:'gya', cat:'yoon'},
-      {char:'ジャ', romaji:'ja', row:'ja', cat:'yoon'}, {char:'ジュ', romaji:'ju', row:'ja', cat:'yoon'}, {char:'ジョ', romaji:'jo', row:'ja', cat:'yoon'},
-      {char:'ビャ', romaji:'bya', row:'bya', cat:'yoon'}, {char:'ビュ', romaji:'byu', row:'bya', cat:'yoon'}, {char:'ビョ', romaji:'byo', row:'bya', cat:'yoon'},
-      {char:'ピャ', romaji:'pya', row:'pya', cat:'yoon'}, {char:'ピュ', romaji:'pyu', row:'pya', cat:'yoon'}, {char:'ピョ', romaji:'pyo', row:'pya', cat:'yoon'},
+      {char:'ギャ', romaji:'gya', row:'gya', cat:'yoon_d'}, {char:'ギュ', romaji:'gyu', row:'gya', cat:'yoon_d'}, {char:'ギョ', romaji:'gyo', row:'gya', cat:'yoon_d'},
+      {char:'ジャ', romaji:'ja', row:'ja', cat:'yoon_d'}, {char:'ジュ', romaji:'ju', row:'ja', cat:'yoon_d'}, {char:'ジョ', romaji:'jo', row:'ja', cat:'yoon_d'},
+      {char:'ビャ', romaji:'bya', row:'bya', cat:'yoon_d'}, {char:'ビュ', romaji:'byu', row:'bya', cat:'yoon_d'}, {char:'ビョ', romaji:'byo', row:'bya', cat:'yoon_d'},
+      {char:'ピャ', romaji:'pya', row:'pya', cat:'yoon_d'}, {char:'ピュ', romaji:'pyu', row:'pya', cat:'yoon_d'}, {char:'ピョ', romaji:'pyo', row:'pya', cat:'yoon_d'},
       {char:'ッ', romaji:'(小) tsu', row:'small', cat:'yoon'},
       {char:'ー', romaji:'ー', row:'chouon', cat:'yoon'},
 ];
 
-    const HARD_ROMAJI = new Set([
-      'shi','chi','tsu','su','fu','n','wo','ji','zu','wa','ra','ri','ru','re','ro',
-      'sa','za','ta','da','ha','ba','pa','hi','bi','pi'
-    ]);
+    
 
     const BASIC_ROWS = [
       {id:'all', label:'Wszystkie'},
@@ -106,12 +103,16 @@ const HIRAGANA = [
       {id:'hya', label:'ひゃ行'},
       {id:'mya', label:'みゃ行'},
       {id:'rya', label:'りゃ行'},
+      {id:'small', label:'っ / ッ'},
+      {id:'chouon', label:'ー'},
+    ];
+
+    const YOON_D_ROWS = [
+      {id:'all', label:'Wszystkie'},
       {id:'gya', label:'ぎゃ行'},
       {id:'ja', label:'じゃ行'},
       {id:'bya', label:'びゃ行'},
       {id:'pya', label:'ぴゃ行'},
-      {id:'small', label:'っ / ッ'},
-      {id:'chouon', label:'ー'},
     ];
 
     let currentScript = 'hiragana';
@@ -137,23 +138,61 @@ const HIRAGANA = [
       catch { return {}; }
     }
 
-    function markHard(romaji, wasWrong) {
-      const stats = getHardStats();
-      if (!stats[romaji]) stats[romaji] = { wrong: 0, total: 0 };
-      stats[romaji].total++;
-      if (wasWrong) stats[romaji].wrong++;
-      localStorage.setItem('hk_hard', JSON.stringify(stats));
+    function markHard(romaji, wasWrong) { /* disabled */ }
+
+    function isHard(romaji) { return false; }
+
+    function getAudioPath(romaji) {
+      // Normalize romaji for file names
+      let r = romaji.replace('(小) tsu', 'tsu').replace('ー', '');
+      if (!r) return null;
+
+      // Basic gojuon + common variants live in Hiragana-Katakana/
+      const basic = new Set([
+        'a','i','u','e','o','ka','ki','ku','ke','ko','sa','shi','su','se','so',
+        'ta','chi','tsu','te','to','na','ni','nu','ne','no','ha','hi','fu','he','ho',
+        'ma','mi','mu','me','mo','ya','yu','yo','ra','ri','ru','re','ro','wa','wo','n'
+      ]);
+      // Dakuten / Handakuten
+      const dakuten = new Set([
+        'ga','gi','gu','ge','go','za','ji','zu','ze','zo','da','de','do',
+        'ba','bi','bu','be','bo','pa','pi','pu','pe','po'
+      ]);
+      // Yoon with dakuten
+      const yoonD = new Set([
+        'gya','gyu','gyo','ja','ju','jo','bya','byu','byo','pya','pyu','pyo'
+      ]);
+
+      if (basic.has(r)) return `Hiragana-Katakana/${r}.mp3`;
+      if (dakuten.has(r)) return `Dakuten-Handakuten/kanasound-${r}.mp3`;
+      if (yoonD.has(r)) return `Dakuten-HandakutenYoon/kanasound-${r}.mp3`;
+
+      // Basic yoon & small tsu / chouon - no files yet, fallback to speech
+      return null;
     }
 
-    function isHard(romaji) {
-      if (HARD_ROMAJI.has(romaji)) return true;
-      const stats = getHardStats();
-      const s = stats[romaji];
-      if (!s || s.total < 3) return false;
-      return (s.wrong / s.total) >= 0.4;
+    let currentAudio = null;
+    function speak(charOrRomaji, romajiHint) {
+      // Prefer audio files; fall back to SpeechSynthesis
+      const romaji = romajiHint || charOrRomaji;
+      const path = getAudioPath(romaji);
+
+      if (path) {
+        if (currentAudio) {
+          currentAudio.pause();
+          currentAudio = null;
+        }
+        currentAudio = new Audio(path);
+        currentAudio.play().catch(() => {
+          // fallback if file missing
+          speakFallback(charOrRomaji);
+        });
+        return;
+      }
+      speakFallback(charOrRomaji);
     }
 
-    function speak(text) {
+    function speakFallback(text) {
       if (!window.speechSynthesis) return;
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
@@ -177,13 +216,9 @@ const HIRAGANA = [
     function getFilteredData(includeEmpty = false) {
       let data = getData();
 
-      if (currentCat === 'hard') {
-        data = data.filter(d => d.char && isHard(d.romaji));
-      } else {
-        data = data.filter(d => d.cat === currentCat);
-      }
+      data = data.filter(d => d.cat === currentCat);
 
-      if (!activeRows.has('all') && currentCat !== 'hard') {
+      if (!activeRows.has('all') ) {
         data = data.filter(d => activeRows.has(d.row));
       }
 
@@ -203,15 +238,11 @@ const HIRAGANA = [
       const container = document.getElementById('rowFilters');
       container.innerHTML = '';
 
-      if (currentCat === 'hard') {
-        container.innerHTML = '<span style="color:var(--text-muted);font-size:0.85rem;">Pokazuje znaki, które sprawiają Ci najwięcej trudności</span>';
-        return;
-      }
-
       let rows;
       if (currentCat === 'basic') rows = BASIC_ROWS;
       else if (currentCat === 'extra') rows = EXTRA_ROWS;
       else if (currentCat === 'yoon') rows = YOON_ROWS;
+      else if (currentCat === 'yoon_d') rows = YOON_D_ROWS;
       else rows = [];
 
       rows.forEach(r => {
@@ -248,7 +279,7 @@ const HIRAGANA = [
       const grid = document.getElementById('chartGrid');
       grid.innerHTML = '';
       const data = getFilteredData(true);
-      const showEmpty = activeRows.has('all') && currentCat !== 'hard';
+      const showEmpty = activeRows.has('all') ;
 
       data.forEach(item => {
         const cell = document.createElement('div');
@@ -257,17 +288,17 @@ const HIRAGANA = [
           cell.className = 'chart-cell empty';
         } else {
           cell.className = 'chart-cell';
-          const hard = isHard(item.romaji) ? '<span class="hard-badge">★</span>' : '';
+          const hard = '';
           cell.innerHTML = `
             <button class="sound-btn" title="Dźwięk">🔊</button>
             <span class="char">${item.char}</span>
-            <span class="romaji">${item.romaji}${hard}</span>
+            <span class="romaji">${item.romaji}</span>
           `;
           cell.querySelector('.sound-btn').onclick = (e) => {
             e.stopPropagation();
-            speak(item.char);
+            speak(item.char, item.romaji);
           };
-          cell.onclick = () => speak(item.char);
+          cell.onclick = () => speak(item.char, item.romaji);
         }
         grid.appendChild(cell);
       });
@@ -304,7 +335,7 @@ const HIRAGANA = [
       document.getElementById('flashTotal').textContent = flashDeck.length;
 
       if (document.getElementById('autoSpeak').checked) {
-        setTimeout(() => speak(item.char), 250);
+        setTimeout(() => speak(item.char, item.romaji), 250);
       }
     }
 
@@ -334,7 +365,7 @@ const HIRAGANA = [
         document.getElementById('quizChoice').classList.remove('hidden');
         document.getElementById('quizType').classList.add('hidden');
         renderQuizOptions(data, true); // true = show characters instead of romaji
-        setTimeout(() => speak(currentQuizItem.char), 300);
+        setTimeout(() => speak(currentQuizItem.char, currentQuizItem.romaji), 300);
       } else if (type === 'choice') {
         charEl.textContent = currentQuizItem.char;
         document.getElementById('quizChoice').classList.remove('hidden');
@@ -510,7 +541,7 @@ const HIRAGANA = [
       document.getElementById('writeRevealChar').textContent = item.char;
       document.getElementById('writeReveal').classList.remove('hidden');
       document.getElementById('writeControlsChallenge').classList.add('hidden');
-      speak(item.char);
+      speak(item.char, item.romaji);
     }
 
     function writeSelfRate(knew) {
@@ -650,7 +681,7 @@ const HIRAGANA = [
     };
     document.getElementById('flashShuffle').onclick = () => initFlashcards();
     document.getElementById('flashSpeak').onclick = () => {
-      if (flashDeck[flashIndex]) speak(flashDeck[flashIndex].char);
+      if (flashDeck[flashIndex]) speak(flashDeck[flashIndex].char, flashDeck[flashIndex].romaji);
     };
     document.getElementById('showRomajiFirst').onchange = () => showFlashcard();
 
@@ -658,7 +689,7 @@ const HIRAGANA = [
     document.getElementById('quizReset').onclick = () => resetQuiz();
     document.getElementById('quizCheck').onclick = () => checkType();
     document.getElementById('quizSpeak').onclick = () => {
-      if (currentQuizItem) speak(currentQuizItem.char);
+      if (currentQuizItem) speak(currentQuizItem.char, currentQuizItem.romaji);
     };
     document.getElementById('quizInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') checkType();
@@ -676,7 +707,7 @@ const HIRAGANA = [
     };
     document.getElementById('writeShuffle').onclick = () => initWrite();
     document.getElementById('writeSpeak').onclick = () => {
-      if (writeDeck[writeIndex]) speak(writeDeck[writeIndex].char);
+      if (writeDeck[writeIndex]) speak(writeDeck[writeIndex].char, writeDeck[writeIndex].romaji);
     };
     document.getElementById('writeCheck').onclick = () => writeCheck();
     document.getElementById('writeKnew').onclick = () => writeSelfRate(true);
