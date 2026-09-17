@@ -733,54 +733,53 @@ const HIRAGANA = [
     ].filter(Boolean);
 
     if (bgMusic) {
-      bgMusic.volume = 0.18; // cicho, klimatycznie
+      bgMusic.volume = 0.18;
+      bgMusic.loop = true;
       let musicMuted = localStorage.getItem('hk_music_muted') === '1';
+      let musicStarted = false;
 
       function updateMusicUI() {
         musicBtns.forEach(btn => {
-          btn.textContent = musicMuted ? '🔇' : '🔊';
           btn.classList.toggle('muted', musicMuted);
         });
       }
 
       function tryPlayMusic() {
         if (musicMuted) return;
-        bgMusic.play().catch(() => {
-          // autoplay blocked until user interaction
-        });
+        const p = bgMusic.play();
+        if (p && p.then) {
+          p.then(() => { musicStarted = true; }).catch(() => {});
+        }
       }
 
-      function toggleMusic() {
+      function toggleMusic(e) {
+        if (e) e.stopPropagation();
         musicMuted = !musicMuted;
         localStorage.setItem('hk_music_muted', musicMuted ? '1' : '0');
         if (musicMuted) {
           bgMusic.pause();
         } else {
-          bgMusic.play().catch(() => {});
+          bgMusic.currentTime = bgMusic.currentTime; // keep position
+          tryPlayMusic();
         }
         updateMusicUI();
       }
 
       musicBtns.forEach(btn => {
-        btn.onclick = (e) => {
-          e.stopPropagation();
-          toggleMusic();
-        };
+        btn.addEventListener('click', toggleMusic);
       });
 
       updateMusicUI();
 
-      // Start after first user click (browser autoplay policy)
-      const startOnInteract = () => {
-        tryPlayMusic();
-        document.removeEventListener('click', startOnInteract);
-        document.removeEventListener('touchstart', startOnInteract);
+      // Start music on first meaningful interaction (browser policy)
+      const unlock = () => {
+        if (!musicMuted && !musicStarted) tryPlayMusic();
+        document.removeEventListener('pointerdown', unlock);
+        document.removeEventListener('keydown', unlock);
       };
-      document.addEventListener('click', startOnInteract);
-      document.addEventListener('touchstart', startOnInteract);
+      document.addEventListener('pointerdown', unlock, { once: true });
+      document.addEventListener('keydown', unlock, { once: true });
 
-      // If already unmuted and allowed, try play
-      if (!musicMuted) {
-        tryPlayMusic();
-      }
+      // Also try immediately (works if browser allows)
+      if (!musicMuted) tryPlayMusic();
     }
