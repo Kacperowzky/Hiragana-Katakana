@@ -147,7 +147,7 @@ const HIRAGANA = [
       let r = romaji.replace('(小) tsu', 'tsu').replace('ー', '');
       if (!r) return null;
 
-      // Basic gojuon + common variants live in Hiragana-Katakana/
+      // Basic gojuon
       const basic = new Set([
         'a','i','u','e','o','ka','ki','ku','ke','ko','sa','shi','su','se','so',
         'ta','chi','tsu','te','to','na','ni','nu','ne','no','ha','hi','fu','he','ho',
@@ -158,6 +158,11 @@ const HIRAGANA = [
         'ga','gi','gu','ge','go','za','ji','zu','ze','zo','da','de','do',
         'ba','bi','bu','be','bo','pa','pi','pu','pe','po'
       ]);
+      // Basic Yoon (kya, sha, cha...)
+      const yoon = new Set([
+        'kya','kyu','kyo','sha','shu','sho','cha','chu','cho',
+        'nya','nyu','nyo','hya','hyu','hyo','mya','myu','myo','rya','ryu','ryo'
+      ]);
       // Yoon with dakuten
       const yoonD = new Set([
         'gya','gyu','gyo','ja','ju','jo','bya','byu','byo','pya','pyu','pyo'
@@ -165,9 +170,10 @@ const HIRAGANA = [
 
       if (basic.has(r)) return `Hiragana-Katakana/${r}.mp3`;
       if (dakuten.has(r)) return `Dakuten-Handakuten/kanasound-${r}.mp3`;
+      if (yoon.has(r)) return `Dakuten-HandakutenYoon1/kanasound-${r}.mp3`;
       if (yoonD.has(r)) return `Dakuten-HandakutenYoon/kanasound-${r}.mp3`;
 
-      // Basic yoon & small tsu / chouon - no files yet, fallback to speech
+      // small tsu / chouon - no dedicated files, fallback to speech
       return null;
     }
 
