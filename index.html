@@ -126,6 +126,10 @@
               <input type="radio" name="quizType" value="type">
               Wpisz romaji
             </label>
+            <label class="toggle-label">
+              <input type="radio" name="quizType" value="listen">
+              Odsłuch
+            </label>
           </div>
 
           <div class="quiz-char" id="quizChar">あ</div>
@@ -160,18 +164,43 @@
 
       <div id="writeView" class="hidden">
         <div class="write-area">
+          <div class="settings-row">
+            <label class="toggle-label">
+              <input type="radio" name="writeMode" value="normal" checked>
+              Normalny
+            </label>
+            <label class="toggle-label">
+              <input type="radio" name="writeMode" value="challenge">
+              Wyzwanie
+            </label>
+          </div>
+
           <div class="write-target" id="writeChar">あ</div>
           <div class="write-romaji" id="writeRomaji">a</div>
           <button class="btn sound" id="writeSpeak">🔊 Posłuchaj</button>
 
           <canvas id="writeCanvas" width="300" height="300"></canvas>
 
-          <p class="write-hint">Narysuj znak powyżej • mysz lub palec</p>
+          <p class="write-hint" id="writeHint">Narysuj znak powyżej • mysz lub palec</p>
 
-          <div class="write-controls">
+          <div class="write-controls" id="writeControlsNormal">
             <button class="btn" id="writeClear">Wyczyść</button>
             <button class="btn primary" id="writeNext">Następny znak →</button>
             <button class="btn" id="writeShuffle">Losuj</button>
+          </div>
+
+          <div class="write-controls hidden" id="writeControlsChallenge">
+            <button class="btn" id="writeClear2">Wyczyść</button>
+            <button class="btn primary" id="writeCheck">Sprawdź</button>
+          </div>
+
+          <div class="write-reveal hidden" id="writeReveal">
+            <div class="write-reveal-char" id="writeRevealChar">あ</div>
+            <p class="write-hint">Czy umiałeś narysować ten znak?</p>
+            <div class="write-controls">
+              <button class="btn success" id="writeKnew">Umiałem</button>
+              <button class="btn error" id="writeMissed">Nie umiałem</button>
+            </div>
           </div>
 
           <div class="quiz-stats">
